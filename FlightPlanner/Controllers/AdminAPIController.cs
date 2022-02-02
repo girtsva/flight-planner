@@ -1,4 +1,5 @@
 ﻿using FlightPlanner.Models;
+using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
@@ -20,7 +21,9 @@ namespace FlightPlanner.Controllers
         [Route("flights")]
         public IActionResult PutFlights(AddFlightRequest request)
         {
-            return null;
+            var flight = FlightStorage.AddFlight(request);
+
+            return Created("", flight);
         }
     }
 }
