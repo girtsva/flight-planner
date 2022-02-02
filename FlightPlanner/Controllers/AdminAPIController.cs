@@ -1,15 +1,26 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FlightPlanner.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlightPlanner.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("admin-api")]
     [ApiController]
+    [Authorize]
     public class AdminAPIController : ControllerBase
     {
+        [HttpGet]
+        [Route("Flights/{id}")]
+        public IActionResult GetFlights(int id)
+        {
+            return NotFound();
+        }
+
+        [HttpPut, Authorize]
+        [Route("flights")]
+        public IActionResult PutFlights(AddFlightRequest request)
+        {
+            return null;
+        }
     }
 }
