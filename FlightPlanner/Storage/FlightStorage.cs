@@ -40,6 +40,25 @@ namespace FlightPlanner.Storage
                 _flights.Remove(flight);
         }
 
+        public static List<Airport> FindAirports(string userInput)
+        {
+            userInput = userInput.ToLower().Trim();
+            
+            var fromAirport = _flights.Where(flight =>
+                flight.From.AirportName.ToLower().Trim().Contains(userInput) ||
+                flight.From.Country.ToLower().Trim().Contains(userInput) ||
+                flight.From.City.ToLower().Trim().Contains(userInput))
+                .Select(airport => airport.From).ToList();
+
+            var toAirport = _flights.Where(flight =>
+                flight.To.AirportName.ToLower().Trim().Contains(userInput) ||
+                flight.To.Country.ToLower().Trim().Contains(userInput) ||
+                flight.To.City.ToLower().Trim().Contains(userInput))
+                .Select(airport => airport.To).ToList();
+
+            return fromAirport.Concat(toAirport).ToList();
+        }
+
         public static void ClearFlights()
         {
             _flights.Clear();

@@ -11,7 +11,7 @@ namespace FlightPlanner.Controllers
     public class AdminAPIController : ControllerBase
     {
         [HttpGet]
-        [Route("Flights/{id}")]
+        [Route("flights/{id}")]
         public IActionResult GetFlights(int id)
         {
             var flight = FlightStorage.GetFlight(id);
@@ -42,7 +42,7 @@ namespace FlightPlanner.Controllers
         }
 
         [HttpDelete]
-        [Route("Flights/{id}")]
+        [Route("flights/{id}")]
         public IActionResult DeleteFlights(int id)
         {
             FlightStorage.DeleteFlight(id);
