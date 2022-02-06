@@ -2,6 +2,7 @@
 using FlightPlanner.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace FlightPlanner.Storage
 {
@@ -25,6 +26,18 @@ namespace FlightPlanner.Storage
             _flights.Add(flight);
 
             return flight;
+        }
+
+        public static Flight GetFlight(int id)
+        {
+            return _flights.SingleOrDefault(flight => flight.Id == id);
+        }
+
+        public static void DeleteFlight(int id)
+        {
+            var flight = GetFlight(id);
+            if (flight != null)
+                _flights.Remove(flight);
         }
 
         public static void ClearFlights()
