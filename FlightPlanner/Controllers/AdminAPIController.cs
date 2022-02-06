@@ -21,9 +21,17 @@ namespace FlightPlanner.Controllers
         [Route("flights")]
         public IActionResult PutFlights(AddFlightRequest request)
         {
-            var flight = FlightStorage.AddFlight(request);
-
-            return Created("", flight);
+            if (!FlightStorage.IsValid(request))
+            {
+                return BadRequest();
+            }
+            
+            if (FlightStorage.Exists(request))
+            {
+                return Conflict();
+            }
+            
+            return Created("", FlightStorage.AddFlight(request));
         }
     }
 }
