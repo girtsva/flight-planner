@@ -1,8 +1,7 @@
-﻿using System;
-using FlightPlanner.Models;
+﻿using FlightPlanner.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace FlightPlanner.Storage
 {
@@ -103,6 +102,21 @@ namespace FlightPlanner.Storage
             var departureTime = DateTime.Parse(request.DepartureTime);
 
             if (arrivalTime <= departureTime)
+                return false;
+
+            return true;
+        }
+
+        public static bool IsValidSearchRequest(SearchFlightRequest request)
+        {
+            if (request == null)
+                return false;
+
+            if (string.IsNullOrEmpty(request.From) || string.IsNullOrEmpty(request.To) ||
+                string.IsNullOrEmpty(request.DepartureDate))
+                return false;
+
+            if (request.From.ToLower().Trim() == request.To.ToLower().Trim())
                 return false;
 
             return true;
