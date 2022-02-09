@@ -26,7 +26,7 @@ namespace FlightPlanner.Controllers
                 return BadRequest();
             }
             
-            return Ok(new PageResult());
+            return Ok(FlightStorage.SearchFlights(request));
         }
 
         [HttpGet]

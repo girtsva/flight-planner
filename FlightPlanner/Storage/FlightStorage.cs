@@ -9,34 +9,45 @@ namespace FlightPlanner.Storage
     {
         private static List<Flight> _flights = new List<Flight>();
         private static int _id;
+        private static readonly object _flightLock = new object();
 
         public static Flight AddFlight(AddFlightRequest request)
         {
-            var flight = new Flight
+            lock (_flightLock)
             {
-                From = request.From,
-                To = request.To,
-                ArrivalTime = request.ArrivalTime,
-                DepartureTime = request.DepartureTime,
-                Carrier = request.Carrier,
-                Id = ++_id
-            };
+                var flight = new Flight
+                {
+                    From = request.From,
+                    To = request.To,
+                    ArrivalTime = request.ArrivalTime,
+                    DepartureTime = request.DepartureTime,
+                    Carrier = request.Carrier,
+                    Id = ++_id
+                };
 
-            _flights.Add(flight);
+                _flights.Add(flight);
 
-            return flight;
+                return flight;
+            }
         }
 
         public static Flight GetFlight(int id)
         {
-            return _flights.SingleOrDefault(flight => flight.Id == id);
+            lock (_flightLock)
+            {
+                return _flights.SingleOrDefault(flight => flight.Id == id);
+            }
         }
 
         public static void DeleteFlight(int id)
         {
-            var flight = GetFlight(id);
-            if (flight != null)
-                _flights.Remove(flight);
+            lock (_flightLock)
+            {
+                var flight = GetFlight(id);
+
+                if (flight != null)
+                    _flights.Remove(flight);
+            }
         }
 
         public static List<Airport> FindAirports(string userInput)
@@ -66,11 +77,14 @@ namespace FlightPlanner.Storage
 
         public static bool Exists(AddFlightRequest request)
         {
-            return _flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
-                                          flight.From.AirportName.ToLower().Trim() == request.From.AirportName.ToLower().Trim() &&
-                                          flight.To.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim() &&
-                                          flight.DepartureTime == request.DepartureTime &&
-                                          flight.ArrivalTime == request.ArrivalTime);
+            lock (_flightLock)
+            {
+                return _flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
+                                              flight.From.AirportName.ToLower().Trim() == request.From.AirportName.ToLower().Trim() &&
+                                              flight.To.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim() &&
+                                              flight.DepartureTime == request.DepartureTime &&
+                                              flight.ArrivalTime == request.ArrivalTime);
+            }
         }
 
         public static bool IsValid(AddFlightRequest request)
@@ -120,6 +134,16 @@ namespace FlightPlanner.Storage
                 return false;
 
             return true;
+        }
+
+        public static PageResult SearchFlights(SearchFlightRequest request)
+        {
+            var foundFlights = _flights.Where(flight =>
+                flight.From.AirportName.ToLower().Trim() == request.From.ToLower().Trim() &&
+                flight.To.AirportName.ToLower().Trim() == request.To.ToLower().Trim() &&
+                DateTime.Parse(flight.DepartureTime).Date == DateTime.Parse(request.DepartureDate)).ToList();
+
+            return new PageResult(foundFlights);
         }
     }
 }
