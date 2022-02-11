@@ -10,6 +10,8 @@ namespace FlightPlanner.Controllers
     [Authorize]
     public class AdminAPIController : ControllerBase
     {
+        private static readonly object _flightLock = new object();
+
         [HttpGet]
         [Route("flights/{id}")]
         public IActionResult GetFlights(int id)
@@ -28,26 +30,32 @@ namespace FlightPlanner.Controllers
         [Route("flights")]
         public IActionResult PutFlights(AddFlightRequest request)
         {
-            if (!FlightStorage.IsValid(request))
+            lock (_flightLock)
             {
-                return BadRequest();
+                if (!FlightStorage.IsValid(request))
+                {
+                    return BadRequest();
+                }
+
+                if (FlightStorage.Exists(request))
+                {
+                    return Conflict();
+                }
+
+                return Created("", FlightStorage.AddFlight(request));
             }
-            
-            if (FlightStorage.Exists(request))
-            {
-                return Conflict();
-            }
-            
-            return Created("", FlightStorage.AddFlight(request));
         }
 
         [HttpDelete]
         [Route("flights/{id}")]
         public IActionResult DeleteFlights(int id)
         {
-            FlightStorage.DeleteFlight(id);
+            lock (_flightLock)
+            {
+                FlightStorage.DeleteFlight(id);
 
-            return Ok();
+                return Ok();
+            }
         }
     }
 }

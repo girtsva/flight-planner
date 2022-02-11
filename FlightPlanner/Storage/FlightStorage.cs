@@ -52,21 +52,24 @@ namespace FlightPlanner.Storage
 
         public static List<Airport> FindAirports(string userInput)
         {
-            userInput = userInput.ToLower().Trim();
-            
-            var fromAirport = _flights.Where(flight =>
-                flight.From.AirportName.ToLower().Trim().Contains(userInput) ||
-                flight.From.Country.ToLower().Trim().Contains(userInput) ||
-                flight.From.City.ToLower().Trim().Contains(userInput))
-                .Select(airport => airport.From).ToList();
+            lock (_flightLock)
+            {
+                userInput = userInput.ToLower().Trim();
 
-            var toAirport = _flights.Where(flight =>
-                flight.To.AirportName.ToLower().Trim().Contains(userInput) ||
-                flight.To.Country.ToLower().Trim().Contains(userInput) ||
-                flight.To.City.ToLower().Trim().Contains(userInput))
-                .Select(airport => airport.To).ToList();
+                var fromAirport = _flights.Where(flight =>
+                        flight.From.AirportName.ToLower().Trim().Contains(userInput) ||
+                        flight.From.Country.ToLower().Trim().Contains(userInput) ||
+                        flight.From.City.ToLower().Trim().Contains(userInput))
+                    .Select(airport => airport.From).ToList();
 
-            return fromAirport.Concat(toAirport).ToList();
+                var toAirport = _flights.Where(flight =>
+                        flight.To.AirportName.ToLower().Trim().Contains(userInput) ||
+                        flight.To.Country.ToLower().Trim().Contains(userInput) ||
+                        flight.To.City.ToLower().Trim().Contains(userInput))
+                    .Select(airport => airport.To).ToList();
+
+                return fromAirport.Concat(toAirport).ToList();
+            }
         }
 
         public static void ClearFlights()
@@ -89,61 +92,70 @@ namespace FlightPlanner.Storage
 
         public static bool IsValid(AddFlightRequest request)
         {
-            if (request == null)
-                return false;
+            lock (_flightLock)
+            {
+                if (request == null)
+                    return false;
 
-            if (string.IsNullOrEmpty(request.Carrier) || string.IsNullOrEmpty(request.DepartureTime) ||
-                string.IsNullOrEmpty(request.ArrivalTime))
-                return false;
+                if (string.IsNullOrEmpty(request.Carrier) || string.IsNullOrEmpty(request.DepartureTime) ||
+                    string.IsNullOrEmpty(request.ArrivalTime))
+                    return false;
 
-            if (request.From == null || request.To == null)
-                return false;
+                if (request.From == null || request.To == null)
+                    return false;
 
-            if (string.IsNullOrEmpty(request.From.AirportName) || string.IsNullOrEmpty(request.From.City) ||
-                string.IsNullOrEmpty(request.From.Country))
-                return false;
+                if (string.IsNullOrEmpty(request.From.AirportName) || string.IsNullOrEmpty(request.From.City) ||
+                    string.IsNullOrEmpty(request.From.Country))
+                    return false;
 
-            if (string.IsNullOrEmpty(request.To.AirportName) || string.IsNullOrEmpty(request.To.City) ||
-                string.IsNullOrEmpty(request.To.Country))
-                return false;
+                if (string.IsNullOrEmpty(request.To.AirportName) || string.IsNullOrEmpty(request.To.City) ||
+                    string.IsNullOrEmpty(request.To.Country))
+                    return false;
 
-            if (request.From.Country.ToLower().Trim() == request.To.Country.ToLower().Trim() &&
-                request.From.City.ToLower().Trim() == request.To.City.ToLower().Trim() &&
-                request.From.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim())
-                return false;
+                if (request.From.Country.ToLower().Trim() == request.To.Country.ToLower().Trim() &&
+                    request.From.City.ToLower().Trim() == request.To.City.ToLower().Trim() &&
+                    request.From.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim())
+                    return false;
 
-            var arrivalTime = DateTime.Parse(request.ArrivalTime);
-            var departureTime = DateTime.Parse(request.DepartureTime);
+                var arrivalTime = DateTime.Parse(request.ArrivalTime);
+                var departureTime = DateTime.Parse(request.DepartureTime);
 
-            if (arrivalTime <= departureTime)
-                return false;
+                if (arrivalTime <= departureTime)
+                    return false;
 
-            return true;
+                return true;
+            }
         }
 
         public static bool IsValidSearchRequest(SearchFlightRequest request)
         {
-            if (request == null)
-                return false;
+            lock (_flightLock)
+            {
+                if (request == null)
+                    return false;
 
-            if (string.IsNullOrEmpty(request.From) || string.IsNullOrEmpty(request.To) ||
-                string.IsNullOrEmpty(request.DepartureDate))
-                return false;
+                if (string.IsNullOrEmpty(request.From) || string.IsNullOrEmpty(request.To) ||
+                    string.IsNullOrEmpty(request.DepartureDate))
+                    return false;
 
-            if (request.From.ToLower().Trim() == request.To.ToLower().Trim())
-                return false;
+                if (request.From.ToLower().Trim() == request.To.ToLower().Trim())
+                    return false;
 
-            return true;
+                return true;
+            }
         }
 
         public static PageResult SearchFlights(SearchFlightRequest request)
         {
-            var foundFlights = _flights.Where(flight =>
-                flight.From.AirportName.ToLower().Trim() == request.From.ToLower().Trim() &&
-                flight.To.AirportName.ToLower().Trim() == request.To.ToLower().Trim() &&
-                DateTime.Parse(flight.DepartureTime).Date == DateTime.Parse(request.DepartureDate)).ToList();
+            lock (_flightLock)
+            {
+                var foundFlights = _flights.Where(flight =>
+                    flight.From.AirportName.ToLower().Trim() == request.From.ToLower().Trim() &&
+                    flight.To.AirportName.ToLower().Trim() == request.To.ToLower().Trim() &&
+                    DateTime.Parse(flight.DepartureTime).Date == DateTime.Parse(request.DepartureDate)).ToList();
 
-            return new PageResult(foundFlights);
+                return new PageResult(foundFlights);
+            }
         }
     }
 }
