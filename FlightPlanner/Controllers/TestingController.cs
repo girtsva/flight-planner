@@ -20,10 +20,8 @@ namespace FlightPlanner.Controllers
         [Route("clear")]
         public IActionResult Clear()
         {
-            _context.RemoveRange(_context.Flights);
-            _context.RemoveRange(_context.Airports);
-            _context.SaveChanges();
-            
+            FlightStorage.ClearFlights(_context);
+
             return Ok();
         }
     }

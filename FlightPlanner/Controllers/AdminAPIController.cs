@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using FlightPlanner.Models;
+﻿using FlightPlanner.Models;
 using FlightPlanner.Storage;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace FlightPlanner.Controllers
 {
@@ -24,13 +23,9 @@ namespace FlightPlanner.Controllers
 
         [HttpGet]
         [Route("flights/{id}")]
-        public IActionResult GetFlights(int id)
+        public IActionResult GetFlight(int id)
         {
-            var flight = _context.Flights
-                .Include(flight => flight.From)
-                .Include(flight => flight.To)
-                .SingleOrDefault(flight => flight.Id == id);
-                //FlightStorage.GetFlight(id);
+            var flight = FlightStorage.GetFlight(id, _context);
 
             if (flight == null)
             {
@@ -46,52 +41,30 @@ namespace FlightPlanner.Controllers
         {
             lock (_flightLock)
             {
-                if (!FlightStorage.IsValid(request))
+                if (!FlightStorage.IsValidAddFlightRequest(request))
                 {
                     return BadRequest();
                 }
 
-                if (FlightStorage.Exists(request, _context))
+                if (FlightStorage.FlightExistsInStorage(request, _context))
                 {
                     return Conflict();
                 }
 
-                var flight = FlightStorage.ConvertToFlight(request);
-                _context.Flights.Add(flight);
-                _context.SaveChanges();
-
-                return Created("", flight);
+                return Created("", FlightStorage.AddFlight(request, _context));
             }
         }
 
         [HttpDelete]
         [Route("flights/{id}")]
-        public IActionResult DeleteFlights(int id)
+        public IActionResult DeleteFlight(int id)
         {
             lock (_flightLock)
             {
-                var flight = _context.Flights
-                    .Include(flight => flight.From)
-                    .Include(flight => flight.To)
-                    .SingleOrDefault(flight => flight.Id == id);
-
-                if (flight != null)
-                {
-                    _context.Flights.Remove(flight);
-                    _context.SaveChanges();
-                }
+                FlightStorage.DeleteFlight(id, _context);
 
                 return Ok();
             }
-        }
-
-        private bool Exists(AddFlightRequest request)  // nosaukumu pamainit -> FlightExistsInStorage
-        {
-            return _context.Flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
-                                   flight.From.AirportName.ToLower().Trim() == request.From.AirportName.ToLower().Trim() &&
-                                   flight.To.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim() &&
-                                   flight.DepartureTime == request.DepartureTime &&
-                                   flight.ArrivalTime == request.ArrivalTime);
         }
     }
 }

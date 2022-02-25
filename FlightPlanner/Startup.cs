@@ -1,12 +1,12 @@
+using FlightPlanner.Handlers;
+using FlightPlanner.Storage;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using FlightPlanner.Handlers;
-using FlightPlanner.Storage;
-using Microsoft.AspNetCore.Authentication;
 
 namespace FlightPlanner
 {
@@ -22,7 +22,6 @@ namespace FlightPlanner
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -37,11 +36,10 @@ namespace FlightPlanner
                     .AllowAnyHeader()
                     .AllowCredentials()
                     .AllowAnyMethod();
-
             }));
+
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,8 +62,6 @@ namespace FlightPlanner
             });
             app.UseAuthentication();
             app.UseAuthorization();
-
-
 
             app.UseEndpoints(endpoints =>
             {

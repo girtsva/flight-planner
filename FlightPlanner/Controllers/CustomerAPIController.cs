@@ -33,7 +33,7 @@ namespace FlightPlanner.Controllers
         {
             lock (_flightLock)
             {
-                if (!FlightStorage.IsValidSearchRequest(request))
+                if (!FlightStorage.IsValidSearchFlightRequest(request))
                 {
                     return BadRequest();
                 }
@@ -44,7 +44,7 @@ namespace FlightPlanner.Controllers
 
         [HttpGet]
         [Route("flights/{id}")]
-        public IActionResult SearchFlights(int id)
+        public IActionResult FindFlightById(int id)
         {
             var flight = FlightStorage.GetFlight(id, _context);
 

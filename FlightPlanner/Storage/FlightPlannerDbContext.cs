@@ -1,7 +1,7 @@
-﻿using System;
-using FlightPlanner.Models;
+﻿using FlightPlanner.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace FlightPlanner.Storage
 {
