@@ -10,19 +10,19 @@ namespace FlightPlanner.Controllers
     [ApiController]
     public class CustomerAPIController : ControllerBase
     {
-        //private readonly FlightPlannerDbContext _context;
+        private readonly FlightPlannerDbContext _context;
         private static readonly object _flightLock = new object();
 
-        //public CustomerAPIController(FlightPlannerDbContext context)
-        //{
-        //    _context = context;
-        //}
+        public CustomerAPIController(FlightPlannerDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         [Route("airports")]
         public IActionResult SearchAirports(string search)
         {
-            var airports = FlightStorage.FindAirports(search, new FlightPlannerDbContext());
+            var airports = FlightStorage.FindAirports(search, _context);
             
             return Ok(airports);
         }
@@ -38,7 +38,7 @@ namespace FlightPlanner.Controllers
                     return BadRequest();
                 }
 
-                return Ok(FlightStorage.SearchFlights(request, new FlightPlannerDbContext()));
+                return Ok(FlightStorage.SearchFlights(request, _context));
             }
         }
 
@@ -46,7 +46,7 @@ namespace FlightPlanner.Controllers
         [Route("flights/{id}")]
         public IActionResult SearchFlights(int id)
         {
-            var flight = FlightStorage.GetFlight(id, new FlightPlannerDbContext());
+            var flight = FlightStorage.GetFlight(id, _context);
 
             if (flight == null)
             {

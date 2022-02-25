@@ -96,11 +96,11 @@ namespace FlightPlanner.Storage
             _id = 0;
         }
 
-        public static bool Exists(AddFlightRequest request)
+        public static bool Exists(AddFlightRequest request, FlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
-                return _flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
+                return context.Flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
                                               flight.From.AirportName.ToLower().Trim() == request.From.AirportName.ToLower().Trim() &&
                                               flight.To.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim() &&
                                               flight.DepartureTime == request.DepartureTime &&
@@ -170,7 +170,8 @@ namespace FlightPlanner.Storage
                 var foundFlights = context.Flights.Where(flight =>
                     flight.From.AirportName.ToLower().Trim() == request.From.ToLower().Trim() &&
                     flight.To.AirportName.ToLower().Trim() == request.To.ToLower().Trim() &&
-                    flight.DepartureTime == request.DepartureDate).ToList();
+                    //flight.DepartureTime == request.DepartureDate).ToList();
+                    flight.DepartureTime.Substring(0, 10) == request.DepartureDate.Substring(0, 10)).ToList();
                     //DateTime.Parse(flight.DepartureTime).Date == DateTime.Parse(request.DepartureDate)).ToList();
 
                 return new PageResult(foundFlights);

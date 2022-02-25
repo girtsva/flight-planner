@@ -51,7 +51,7 @@ namespace FlightPlanner.Controllers
                     return BadRequest();
                 }
 
-                if (Exists(request))
+                if (FlightStorage.Exists(request, _context))
                 {
                     return Conflict();
                 }
