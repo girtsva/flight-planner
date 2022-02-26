@@ -155,7 +155,10 @@ namespace FlightPlanner.Storage
         {
             lock (_flightLock)
             {
-                var foundFlights = context.Flights.Where(flight =>
+                var foundFlights = context.Flights
+                    .Include(flight => flight.From)
+                    .Include(flight => flight.To)
+                    .Where(flight =>
                     flight.From.AirportName.ToLower().Trim() == request.From.ToLower().Trim() &&
                     flight.To.AirportName.ToLower().Trim() == request.To.ToLower().Trim() &&
                     flight.DepartureTime.Substring(0, 10) == request.DepartureDate.Substring(0, 10)).ToList();
