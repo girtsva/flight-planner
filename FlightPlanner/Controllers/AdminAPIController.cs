@@ -1,8 +1,9 @@
 ﻿using FlightPlanner.Models;
 using FlightPlanner.Storage;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace FlightPlanner.Controllers
 {
@@ -12,13 +13,19 @@ namespace FlightPlanner.Controllers
     [Authorize]
     public class AdminAPIController : ControllerBase
     {
+        private readonly FlightPlannerDbContext _context;
         private static readonly object _flightLock = new object();
+
+        public AdminAPIController(FlightPlannerDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpGet]
         [Route("flights/{id}")]
-        public IActionResult GetFlights(int id)
+        public IActionResult GetFlight(int id)
         {
-            var flight = FlightStorage.GetFlight(id);
+            var flight = FlightStorage.GetFlight(id, _context);
 
             if (flight == null)
             {
@@ -34,27 +41,27 @@ namespace FlightPlanner.Controllers
         {
             lock (_flightLock)
             {
-                if (!FlightStorage.IsValid(request))
+                if (!FlightStorage.IsValidAddFlightRequest(request))
                 {
                     return BadRequest();
                 }
 
-                if (FlightStorage.Exists(request))
+                if (FlightStorage.FlightExistsInStorage(request, _context))
                 {
                     return Conflict();
                 }
 
-                return Created("", FlightStorage.AddFlight(request));
+                return Created("", FlightStorage.AddFlight(request, _context));
             }
         }
 
         [HttpDelete]
         [Route("flights/{id}")]
-        public IActionResult DeleteFlights(int id)
+        public IActionResult DeleteFlight(int id)
         {
             lock (_flightLock)
             {
-                FlightStorage.DeleteFlight(id);
+                FlightStorage.DeleteFlight(id, _context);
 
                 return Ok();
             }

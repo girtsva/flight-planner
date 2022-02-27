@@ -1,4 +1,5 @@
 ﻿using FlightPlanner.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,9 @@ namespace FlightPlanner.Storage
 {
     public static class FlightStorage
     {
-        private static List<Flight> _flights = new List<Flight>();
-        private static int _id;
         private static readonly object _flightLock = new object();
 
-        public static Flight AddFlight(AddFlightRequest request)
+        public static Flight AddFlight(AddFlightRequest request, FlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
@@ -21,48 +20,54 @@ namespace FlightPlanner.Storage
                     To = request.To,
                     ArrivalTime = request.ArrivalTime,
                     DepartureTime = request.DepartureTime,
-                    Carrier = request.Carrier,
-                    Id = ++_id
+                    Carrier = request.Carrier
                 };
 
-                _flights.Add(flight);
+                context.Flights.Add(flight);
+                context.SaveChanges();
 
                 return flight;
             }
         }
 
-        public static Flight GetFlight(int id)
+        public static Flight GetFlight(int id, FlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
-                return _flights.SingleOrDefault(flight => flight.Id == id);
+                return context.Flights
+                    .Include(flight => flight.From)
+                    .Include(flight => flight.To)
+                    .SingleOrDefault(flight => flight.Id == id);
             }
         }
 
-        public static void DeleteFlight(int id)
+        public static void DeleteFlight(int id, FlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
-                var flight = GetFlight(id);
+                var flight = GetFlight(id, context);
 
                 if (flight != null)
-                    _flights.Remove(flight);
+                {
+                    context.Flights.Remove(flight);
+                    context.SaveChanges();
+                }
             }
         }
 
-        public static List<Airport> FindAirports(string userInput)
+        public static List<Airport> FindAirports(string userInput, FlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
                 userInput = userInput.ToLower().Trim();
 
-                var fromAirport = _flights.Where(flight =>
+                var fromAirport = context.Flights.Where(flight =>
                         flight.From.AirportName.ToLower().Trim().Contains(userInput) ||
                         flight.From.Country.ToLower().Trim().Contains(userInput) ||
                         flight.From.City.ToLower().Trim().Contains(userInput))
                     .Select(airport => airport.From).ToList();
 
-                var toAirport = _flights.Where(flight =>
+                var toAirport = context.Flights.Where(flight =>
                         flight.To.AirportName.ToLower().Trim().Contains(userInput) ||
                         flight.To.Country.ToLower().Trim().Contains(userInput) ||
                         flight.To.City.ToLower().Trim().Contains(userInput))
@@ -72,17 +77,18 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static void ClearFlights()
+        public static void ClearFlights(FlightPlannerDbContext context)
         {
-            _flights.Clear();
-            _id = 0;
+            context.RemoveRange(context.Flights);
+            context.RemoveRange(context.Airports);
+            context.SaveChanges();
         }
 
-        public static bool Exists(AddFlightRequest request)
+        public static bool FlightExistsInStorage(AddFlightRequest request, FlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
-                return _flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
+                return context.Flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
                                               flight.From.AirportName.ToLower().Trim() == request.From.AirportName.ToLower().Trim() &&
                                               flight.To.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim() &&
                                               flight.DepartureTime == request.DepartureTime &&
@@ -90,7 +96,7 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static bool IsValid(AddFlightRequest request)
+        public static bool IsValidAddFlightRequest(AddFlightRequest request)
         {
             lock (_flightLock)
             {
@@ -127,7 +133,7 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static bool IsValidSearchRequest(SearchFlightRequest request)
+        public static bool IsValidSearchFlightRequest(SearchFlightRequest request)
         {
             lock (_flightLock)
             {
@@ -145,14 +151,17 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static PageResult SearchFlights(SearchFlightRequest request)
+        public static PageResult SearchFlights(SearchFlightRequest request, FlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
-                var foundFlights = _flights.Where(flight =>
+                var foundFlights = context.Flights
+                    .Include(flight => flight.From)
+                    .Include(flight => flight.To)
+                    .Where(flight =>
                     flight.From.AirportName.ToLower().Trim() == request.From.ToLower().Trim() &&
                     flight.To.AirportName.ToLower().Trim() == request.To.ToLower().Trim() &&
-                    DateTime.Parse(flight.DepartureTime).Date == DateTime.Parse(request.DepartureDate)).ToList();
+                    flight.DepartureTime.Substring(0, 10) == request.DepartureDate.Substring(0, 10)).ToList();
 
                 return new PageResult(foundFlights);
             }

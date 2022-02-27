@@ -9,11 +9,19 @@ namespace FlightPlanner.Controllers
     [ApiController]
     public class TestingController : ControllerBase
     {
+        private readonly FlightPlannerDbContext _context;
+
+        public TestingController(FlightPlannerDbContext context)
+        {
+            _context = context;
+        }
+        
         [HttpPost]
         [Route("clear")]
         public IActionResult Clear()
         {
-            FlightStorage.ClearFlights();
+            FlightStorage.ClearFlights(_context);
+
             return Ok();
         }
     }
