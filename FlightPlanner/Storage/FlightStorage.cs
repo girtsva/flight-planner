@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FlightPlanner.Core.DTO;
+using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 
 namespace FlightPlanner.Storage
@@ -11,21 +13,30 @@ namespace FlightPlanner.Storage
     {
         private static readonly object _flightLock = new object();
 
-        public static Flight AddFlight(AddFlightRequest request, IFlightPlannerDbContext context)
+        public static Flight AddFlight(AddFlightRequest request, IFlightService flightService)
         {
             lock (_flightLock)
             {
                 var flight = new Flight
                 {
-                    From = request.From,
-                    To = request.To,
+                    From = new Airport
+                    {
+                        AirportName = request.From.Airport,
+                        City = request.From.City,
+                        Country = request.From.Country
+                    },
+                    To = new Airport
+                    {
+                        AirportName = request.To.Airport,
+                        City = request.To.City,
+                        Country = request.To.Country
+                    },
                     ArrivalTime = request.ArrivalTime,
                     DepartureTime = request.DepartureTime,
                     Carrier = request.Carrier
                 };
 
-                context.Flights.Add(flight);
-                context.SaveChanges();
+                flightService.Create(flight);
 
                 return flight;
             }
@@ -85,17 +96,17 @@ namespace FlightPlanner.Storage
             context.SaveChanges();
         }
 
-        public static bool FlightExistsInStorage(AddFlightRequest request, IFlightPlannerDbContext context)
-        {
-            lock (_flightLock)
-            {
-                return context.Flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
-                                              flight.From.AirportName.ToLower().Trim() == request.From.AirportName.ToLower().Trim() &&
-                                              flight.To.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim() &&
-                                              flight.DepartureTime == request.DepartureTime &&
-                                              flight.ArrivalTime == request.ArrivalTime);
-            }
-        }
+        //public static bool FlightExistsInStorage(AddFlightRequest request, IFlightPlannerDbContext context)
+        //{
+        //    lock (_flightLock)
+        //    {
+        //        return context.Flights.Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
+        //                                      flight.From.AirportName.ToLower().Trim() == request.From.Airport.ToLower().Trim() &&
+        //                                      flight.To.AirportName.ToLower().Trim() == request.To.Airport.ToLower().Trim() &&
+        //                                      flight.DepartureTime == request.DepartureTime &&
+        //                                      flight.ArrivalTime == request.ArrivalTime);
+        //    }
+        //}
 
         public static bool IsValidAddFlightRequest(AddFlightRequest request)
         {
@@ -111,17 +122,17 @@ namespace FlightPlanner.Storage
                 if (request.From == null || request.To == null)
                     return false;
 
-                if (string.IsNullOrEmpty(request.From.AirportName) || string.IsNullOrEmpty(request.From.City) ||
+                if (string.IsNullOrEmpty(request.From.Airport) || string.IsNullOrEmpty(request.From.City) ||
                     string.IsNullOrEmpty(request.From.Country))
                     return false;
 
-                if (string.IsNullOrEmpty(request.To.AirportName) || string.IsNullOrEmpty(request.To.City) ||
+                if (string.IsNullOrEmpty(request.To.Airport) || string.IsNullOrEmpty(request.To.City) ||
                     string.IsNullOrEmpty(request.To.Country))
                     return false;
 
                 if (request.From.Country.ToLower().Trim() == request.To.Country.ToLower().Trim() &&
                     request.From.City.ToLower().Trim() == request.To.City.ToLower().Trim() &&
-                    request.From.AirportName.ToLower().Trim() == request.To.AirportName.ToLower().Trim())
+                    request.From.Airport.ToLower().Trim() == request.To.Airport.ToLower().Trim())
                     return false;
 
                 var arrivalTime = DateTime.Parse(request.ArrivalTime);

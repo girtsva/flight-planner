@@ -21,4 +21,8 @@
     <ProjectReference Include="..\FlightPlanner.Services\FlightPlanner.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

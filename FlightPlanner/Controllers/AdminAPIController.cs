@@ -1,10 +1,12 @@
-﻿using FlightPlanner.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FlightPlanner.Core.DTO;
+using FlightPlanner.Core.Services;
+using FlightPlanner.Data;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using FlightPlanner.Data;
 
 namespace FlightPlanner.Controllers
 {
@@ -14,26 +16,23 @@ namespace FlightPlanner.Controllers
     [Authorize]
     public class AdminAPIController : ControllerBase
     {
-        private readonly IFlightPlannerDbContext _context;
+        private readonly IFlightService _flightService;
+        private readonly IEnumerable<IValidator> _validators;
         private static readonly object _flightLock = new object();
 
-        public AdminAPIController(IFlightPlannerDbContext context)
+        public AdminAPIController(IFlightService flightService, IEnumerable<IValidator> validators)
         {
-            _context = context;
+            _flightService = flightService;
+            _validators = validators;
         }
 
         [HttpGet]
         [Route("flights/{id}")]
         public IActionResult GetFlight(int id)
         {
-            var flight = FlightStorage.GetFlight(id, _context);
+            var flight = _flightService.GetFlightWithAirports(id);
 
-            if (flight == null)
-            {
-                return NotFound();
-            }
-                
-            return Ok(flight);
+            return flight == null ? NotFound() : Ok(flight);
         }
 
         [HttpPut, Authorize]
@@ -42,17 +41,17 @@ namespace FlightPlanner.Controllers
         {
             lock (_flightLock)
             {
-                if (!FlightStorage.IsValidAddFlightRequest(request))
+                if (!_validators.All(validator => validator.Validate(request)))
                 {
                     return BadRequest();
                 }
 
-                if (FlightStorage.FlightExistsInStorage(request, _context))
+                if (_flightService.FlightExistsInStorage(request))
                 {
                     return Conflict();
                 }
 
-                return Created("", FlightStorage.AddFlight(request, _context));
+                return Created("", FlightStorage.AddFlight(request, _flightService));
             }
         }
 
@@ -62,7 +61,8 @@ namespace FlightPlanner.Controllers
         {
             lock (_flightLock)
             {
-                FlightStorage.DeleteFlight(id, _context);
+                _flightService.DeleteFlightById(id);
+                //FlightStorage.DeleteFlight(id, _context);
 
                 return Ok();
             }

@@ -15,3 +15,4 @@ D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0
 D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\ref\FlightPlanner.Data.dll
 D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.pdb
 D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.genruntimeconfig.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.csproj.CopyComplete

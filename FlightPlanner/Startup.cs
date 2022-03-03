@@ -3,6 +3,7 @@ using FlightPlanner.Data;
 using FlightPlanner.Handlers;
 using FlightPlanner.Models;
 using FlightPlanner.Services;
+using FlightPlanner.Services.Validators;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,21 @@ namespace FlightPlanner
             services.AddTransient<IDbService, DbService>();
             services.AddTransient<IEntityService<Flight>, EntityService<Flight>>();
             services.AddTransient<IEntityService<Airport>, EntityService<Airport>>();
+            services.AddTransient<IFlightService, FlightService>();
+            services.AddTransient<IValidator, AddFlightRequestValidator>();
+            services.AddTransient<IValidator, CarrierValidator>();
+            services.AddTransient<IValidator, ArrivalTimeValidator>();
+            services.AddTransient<IValidator, DepartureTimeValidator>();
+            services.AddTransient<IValidator, FromAirportValidator>();
+            services.AddTransient<IValidator, ToAirportValidator>();
+            services.AddTransient<IValidator, FromAirportCityValidator>();
+            services.AddTransient<IValidator, FromAirportCountryValidator>();
+            services.AddTransient<IValidator, FromAirportNameValidator>();
+            services.AddTransient<IValidator, ToAirportCityValidator>();
+            services.AddTransient<IValidator, ToAirportCountryValidator>();
+            services.AddTransient<IValidator, ToAirportNameValidator>();
+            services.AddTransient<IValidator, AirportEqualityValidator>();
+            services.AddTransient<IValidator, TimeFrameValidator>();
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {

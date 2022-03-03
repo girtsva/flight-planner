@@ -1,5 +1,5 @@
-﻿using FlightPlanner.Data;
-using FlightPlanner.Models;
+﻿using FlightPlanner.Core.DTO;
+using FlightPlanner.Data;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;

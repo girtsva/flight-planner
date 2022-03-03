@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using FlightPlanner.Models;
 
-namespace FlightPlanner.Models
+namespace FlightPlanner.Core.DTO
 {
     public class PageResult
     {
