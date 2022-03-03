@@ -5,9 +5,9 @@ namespace FlightPlanner.Services.Validators
 {
     public class ToAirportCityValidator : IValidator
     {
-        public bool Validate(AddFlightRequest request)
+        public bool IsValid(AddFlightDto dto)
         {
-            return !string.IsNullOrEmpty(request?.To?.City);
+            return !string.IsNullOrEmpty(dto?.To?.City);
         }
     }
 }

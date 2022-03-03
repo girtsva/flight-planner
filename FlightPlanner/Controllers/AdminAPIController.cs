@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
+using FlightPlanner.Models;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -18,12 +20,14 @@ namespace FlightPlanner.Controllers
     {
         private readonly IFlightService _flightService;
         private readonly IEnumerable<IValidator> _validators;
+        private readonly IMapper _mapper;
         private static readonly object _flightLock = new object();
 
-        public AdminAPIController(IFlightService flightService, IEnumerable<IValidator> validators)
+        public AdminAPIController(IFlightService flightService, IEnumerable<IValidator> validators, IMapper mapper)
         {
             _flightService = flightService;
             _validators = validators;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -37,21 +41,25 @@ namespace FlightPlanner.Controllers
 
         [HttpPut, Authorize]
         [Route("flights")]
-        public IActionResult PutFlights(AddFlightRequest request)
+        public IActionResult PutFlights(AddFlightDto dto)
         {
             lock (_flightLock)
             {
-                if (!_validators.All(validator => validator.Validate(request)))
+                if (!_validators.All(validator => validator.IsValid(dto)))
                 {
                     return BadRequest();
                 }
 
-                if (_flightService.FlightExistsInStorage(request))
+                if (_flightService.FlightExistsInStorage(dto))
                 {
                     return Conflict();
                 }
 
-                return Created("", FlightStorage.AddFlight(request, _flightService));
+                var flight = _mapper.Map<Flight>(dto);
+
+                _flightService.Create(flight);
+
+                return Created("", _mapper.Map<AddFlightDto>(flight));
             }
         }
 

@@ -29,15 +29,15 @@ namespace FlightPlanner.Services
                 Delete(flight);
         }
 
-        public bool FlightExistsInStorage(AddFlightRequest request)
+        public bool FlightExistsInStorage(AddFlightDto dto)
         {
             //lock (_flightLock)
             //{
-                return Query().Any(flight => flight.Carrier.ToLower().Trim() == request.Carrier.ToLower().Trim() &&
-                                                     flight.From.AirportName.ToLower().Trim() == request.From.Airport.ToLower().Trim() &&
-                                                     flight.To.AirportName.ToLower().Trim() == request.To.Airport.ToLower().Trim() &&
-                                                     flight.DepartureTime == request.DepartureTime &&
-                                                     flight.ArrivalTime == request.ArrivalTime);
+                return Query().Any(flight => flight.Carrier.ToLower().Trim() == dto.Carrier.ToLower().Trim() &&
+                                                     flight.From.AirportName.ToLower().Trim() == dto.From.Airport.ToLower().Trim() &&
+                                                     flight.To.AirportName.ToLower().Trim() == dto.To.Airport.ToLower().Trim() &&
+                                                     flight.DepartureTime == dto.DepartureTime &&
+                                                     flight.ArrivalTime == dto.ArrivalTime);
             //}
         }
     }

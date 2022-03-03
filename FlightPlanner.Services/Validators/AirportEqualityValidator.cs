@@ -6,10 +6,10 @@ namespace FlightPlanner.Services.Validators
 {
     public class AirportEqualityValidator : IValidator
     {
-        public bool Validate(AddFlightRequest request)
+        public bool IsValid(AddFlightDto dto)
         {
-            return !string.Equals(request.From.Airport.Trim(), 
-                                 request.To.Airport.Trim(),
+            return !string.Equals(dto.From.Airport.Trim(), 
+                                 dto.To.Airport.Trim(),
                                  StringComparison.CurrentCultureIgnoreCase);
         }
     }

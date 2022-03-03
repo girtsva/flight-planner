@@ -5,9 +5,9 @@ namespace FlightPlanner.Services.Validators
 {
     public class CarrierValidator : IValidator
     {
-        public bool Validate(AddFlightRequest request)
+        public bool IsValid(AddFlightDto dto)
         {
-            return !string.IsNullOrEmpty(request?.Carrier);
+            return !string.IsNullOrEmpty(dto?.Carrier);
         }
     }
 }

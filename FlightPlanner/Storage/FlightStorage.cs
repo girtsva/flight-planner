@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
@@ -13,34 +14,34 @@ namespace FlightPlanner.Storage
     {
         private static readonly object _flightLock = new object();
 
-        public static Flight AddFlight(AddFlightRequest request, IFlightService flightService)
-        {
-            lock (_flightLock)
-            {
-                var flight = new Flight
-                {
-                    From = new Airport
-                    {
-                        AirportName = request.From.Airport,
-                        City = request.From.City,
-                        Country = request.From.Country
-                    },
-                    To = new Airport
-                    {
-                        AirportName = request.To.Airport,
-                        City = request.To.City,
-                        Country = request.To.Country
-                    },
-                    ArrivalTime = request.ArrivalTime,
-                    DepartureTime = request.DepartureTime,
-                    Carrier = request.Carrier
-                };
+        //public static Flight AddFlight(AddFlightDto dto, IFlightService flightService)
+        //{
+        //    lock (_flightLock)
+        //    {
+        //        var flight = new Flight
+        //        {
+        //            From = new Airport
+        //            {
+        //                AirportName = dto.From.Airport,
+        //                City = dto.From.City,
+        //                Country = dto.From.Country
+        //            },
+        //            To = new Airport
+        //            {
+        //                AirportName = dto.To.Airport,
+        //                City = dto.To.City,
+        //                Country = dto.To.Country
+        //            },
+        //            ArrivalTime = dto.ArrivalTime,
+        //            DepartureTime = dto.DepartureTime,
+        //            Carrier = dto.Carrier
+        //        };
 
-                flightService.Create(flight);
+        //        flightService.Create(flight);
 
-                return flight;
-            }
-        }
+        //        return flight;
+        //    }
+        //}
 
         public static Flight GetFlight(int id, IFlightPlannerDbContext context)
         {
@@ -108,35 +109,35 @@ namespace FlightPlanner.Storage
         //    }
         //}
 
-        public static bool IsValidAddFlightRequest(AddFlightRequest request)
+        public static bool IsValidAddFlightRequest(AddFlightDto dto)
         {
             lock (_flightLock)
             {
-                if (request == null)
+                if (dto == null)
                     return false;
 
-                if (string.IsNullOrEmpty(request.Carrier) || string.IsNullOrEmpty(request.DepartureTime) ||
-                    string.IsNullOrEmpty(request.ArrivalTime))
+                if (string.IsNullOrEmpty(dto.Carrier) || string.IsNullOrEmpty(dto.DepartureTime) ||
+                    string.IsNullOrEmpty(dto.ArrivalTime))
                     return false;
 
-                if (request.From == null || request.To == null)
+                if (dto.From == null || dto.To == null)
                     return false;
 
-                if (string.IsNullOrEmpty(request.From.Airport) || string.IsNullOrEmpty(request.From.City) ||
-                    string.IsNullOrEmpty(request.From.Country))
+                if (string.IsNullOrEmpty(dto.From.Airport) || string.IsNullOrEmpty(dto.From.City) ||
+                    string.IsNullOrEmpty(dto.From.Country))
                     return false;
 
-                if (string.IsNullOrEmpty(request.To.Airport) || string.IsNullOrEmpty(request.To.City) ||
-                    string.IsNullOrEmpty(request.To.Country))
+                if (string.IsNullOrEmpty(dto.To.Airport) || string.IsNullOrEmpty(dto.To.City) ||
+                    string.IsNullOrEmpty(dto.To.Country))
                     return false;
 
-                if (request.From.Country.ToLower().Trim() == request.To.Country.ToLower().Trim() &&
-                    request.From.City.ToLower().Trim() == request.To.City.ToLower().Trim() &&
-                    request.From.Airport.ToLower().Trim() == request.To.Airport.ToLower().Trim())
+                if (dto.From.Country.ToLower().Trim() == dto.To.Country.ToLower().Trim() &&
+                    dto.From.City.ToLower().Trim() == dto.To.City.ToLower().Trim() &&
+                    dto.From.Airport.ToLower().Trim() == dto.To.Airport.ToLower().Trim())
                     return false;
 
-                var arrivalTime = DateTime.Parse(request.ArrivalTime);
-                var departureTime = DateTime.Parse(request.DepartureTime);
+                var arrivalTime = DateTime.Parse(dto.ArrivalTime);
+                var departureTime = DateTime.Parse(dto.DepartureTime);
 
                 if (arrivalTime <= departureTime)
                     return false;

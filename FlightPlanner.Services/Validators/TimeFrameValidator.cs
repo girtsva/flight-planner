@@ -6,10 +6,10 @@ namespace FlightPlanner.Services.Validators
 {
     public class TimeFrameValidator : IValidator
     {
-        public bool Validate(AddFlightRequest request)
+        public bool IsValid(AddFlightDto dto)
         {
-            var arrivalTime = DateTime.Parse(request.ArrivalTime);
-            var departureTime = DateTime.Parse(request.DepartureTime);
+            var arrivalTime = DateTime.Parse(dto.ArrivalTime);
+            var departureTime = DateTime.Parse(dto.DepartureTime);
 
             return arrivalTime > departureTime;
         }

@@ -5,9 +5,9 @@ namespace FlightPlanner.Services.Validators
 {
     public class DepartureTimeValidator : IValidator
     {
-        public bool Validate(AddFlightRequest request)
+        public bool IsValid(AddFlightDto dto)
         {
-            return !string.IsNullOrEmpty(request?.DepartureTime);
+            return !string.IsNullOrEmpty(dto?.DepartureTime);
         }
     }
 }

@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "e0LbxvDl1zA0eerfkofIaLhLhdGkCgYwEJw40amhdzz+cxXBfPcRLHRn5QVPRgPMlcb3Nk/VSGW3xY9TBqqTYA==",
+  "dgSpecHash": "+jlG0Y7yxUrYIEpIWjvfsIgSA/QIFeyIxVWyeLyCRxqN7g5L35ZfnxPiYXQbyS0dsKI+37+STNoHMaGJf6riEQ==",
   "success": true,
   "projectFilePath": "D:\\Programming\\CSharp\\Codelex\\flight-planner\\FlightPlanner.Services\\FlightPlanner.Services.csproj",
   "expectedPackageFiles": [
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\Girts\\.nuget\\packages\\automapper\\11.0.1\\automapper.11.0.1.nupkg.sha512",
+    "C:\\Users\\Girts\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\Girts\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",
     "C:\\Users\\Girts\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.0.1\\microsoft.data.sqlclient.sni.runtime.2.0.1.nupkg.sha512",
     "C:\\Users\\Girts\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.14\\microsoft.entityframeworkcore.5.0.14.nupkg.sha512",

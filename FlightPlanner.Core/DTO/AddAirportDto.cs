@@ -1,6 +1,6 @@
 ﻿namespace FlightPlanner.Core.DTO
 {
-    public class AddAirportRequest
+    public class AddAirportDto
     {
         public string Country { get; set; }
         public string City { get; set; }

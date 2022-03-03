@@ -1,8 +1,10 @@
+using AutoMapper;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 using FlightPlanner.Handlers;
 using FlightPlanner.Models;
 using FlightPlanner.Services;
+using FlightPlanner.Services.Mappers;
 using FlightPlanner.Services.Validators;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Authentication;
@@ -41,6 +43,7 @@ namespace FlightPlanner
             });
             services.AddTransient<IFlightPlannerDbContext, FlightPlannerDbContext>();
             services.AddTransient<IDbService, DbService>();
+            services.AddTransient<IDbClearService, DbClearService>();
             services.AddTransient<IEntityService<Flight>, EntityService<Flight>>();
             services.AddTransient<IEntityService<Airport>, EntityService<Airport>>();
             services.AddTransient<IFlightService, FlightService>();
@@ -58,6 +61,8 @@ namespace FlightPlanner
             services.AddTransient<IValidator, ToAirportNameValidator>();
             services.AddTransient<IValidator, AirportEqualityValidator>();
             services.AddTransient<IValidator, TimeFrameValidator>();
+            var mapper = AutoMapperConfig.CreateMapper();
+            services.AddSingleton<IMapper>(mapper);
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
