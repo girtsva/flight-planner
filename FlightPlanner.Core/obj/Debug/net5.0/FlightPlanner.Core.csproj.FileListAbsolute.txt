@@ -1,0 +1,12 @@
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\bin\Debug\net5.0\FlightPlanner.Core.deps.json
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\bin\Debug\net5.0\FlightPlanner.Core.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\bin\Debug\net5.0\ref\FlightPlanner.Core.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\bin\Debug\net5.0\FlightPlanner.Core.pdb
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\FlightPlanner.Core.csproj.AssemblyReference.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\FlightPlanner.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\FlightPlanner.Core.AssemblyInfoInputs.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\FlightPlanner.Core.AssemblyInfo.cs
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\FlightPlanner.Core.csproj.CoreCompileInputs.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\FlightPlanner.Core.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\ref\FlightPlanner.Core.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Core\obj\Debug\net5.0\FlightPlanner.Core.pdb

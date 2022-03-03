@@ -1,0 +1,17 @@
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\FlightPlanner.Data.deps.json
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\FlightPlanner.Data.runtimeconfig.json
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\FlightPlanner.Data.runtimeconfig.dev.json
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\FlightPlanner.Data.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\ref\FlightPlanner.Data.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\FlightPlanner.Data.pdb
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\FlightPlanner.Core.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\bin\Debug\net5.0\FlightPlanner.Core.pdb
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.csproj.AssemblyReference.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.AssemblyInfoInputs.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.AssemblyInfo.cs
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.csproj.CoreCompileInputs.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\ref\FlightPlanner.Data.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.pdb
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Data\obj\Debug\net5.0\FlightPlanner.Data.genruntimeconfig.cache

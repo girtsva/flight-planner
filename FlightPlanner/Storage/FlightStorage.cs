@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FlightPlanner.Data;
 
 namespace FlightPlanner.Storage
 {
@@ -10,7 +11,7 @@ namespace FlightPlanner.Storage
     {
         private static readonly object _flightLock = new object();
 
-        public static Flight AddFlight(AddFlightRequest request, FlightPlannerDbContext context)
+        public static Flight AddFlight(AddFlightRequest request, IFlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
@@ -30,7 +31,7 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static Flight GetFlight(int id, FlightPlannerDbContext context)
+        public static Flight GetFlight(int id, IFlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
@@ -41,7 +42,7 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static void DeleteFlight(int id, FlightPlannerDbContext context)
+        public static void DeleteFlight(int id, IFlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
@@ -55,7 +56,7 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static List<Airport> FindAirports(string userInput, FlightPlannerDbContext context)
+        public static List<Airport> FindAirports(string userInput, IFlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
@@ -77,14 +78,14 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static void ClearFlights(FlightPlannerDbContext context)
+        public static void ClearFlights(IFlightPlannerDbContext context)
         {
-            context.RemoveRange(context.Flights);
-            context.RemoveRange(context.Airports);
+            context.Flights.RemoveRange(context.Flights);
+            context.Airports.RemoveRange(context.Airports);
             context.SaveChanges();
         }
 
-        public static bool FlightExistsInStorage(AddFlightRequest request, FlightPlannerDbContext context)
+        public static bool FlightExistsInStorage(AddFlightRequest request, IFlightPlannerDbContext context)
         {
             lock (_flightLock)
             {
@@ -151,7 +152,7 @@ namespace FlightPlanner.Storage
             }
         }
 
-        public static PageResult SearchFlights(SearchFlightRequest request, FlightPlannerDbContext context)
+        public static PageResult SearchFlights(SearchFlightRequest request, IFlightPlannerDbContext context)
         {
             lock (_flightLock)
             {

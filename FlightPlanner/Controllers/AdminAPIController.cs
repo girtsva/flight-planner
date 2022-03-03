@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using FlightPlanner.Data;
 
 namespace FlightPlanner.Controllers
 {
@@ -13,10 +14,10 @@ namespace FlightPlanner.Controllers
     [Authorize]
     public class AdminAPIController : ControllerBase
     {
-        private readonly FlightPlannerDbContext _context;
+        private readonly IFlightPlannerDbContext _context;
         private static readonly object _flightLock = new object();
 
-        public AdminAPIController(FlightPlannerDbContext context)
+        public AdminAPIController(IFlightPlannerDbContext context)
         {
             _context = context;
         }

@@ -1,4 +1,5 @@
-﻿using FlightPlanner.Storage;
+﻿using FlightPlanner.Data;
+using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,9 @@ namespace FlightPlanner.Controllers
     [ApiController]
     public class TestingController : ControllerBase
     {
-        private readonly FlightPlannerDbContext _context;
+        private readonly IFlightPlannerDbContext _context;
 
-        public TestingController(FlightPlannerDbContext context)
+        public TestingController(IFlightPlannerDbContext context)
         {
             _context = context;
         }

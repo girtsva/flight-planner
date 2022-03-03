@@ -1,21 +1,19 @@
-﻿using System;
+﻿using FlightPlanner.Core.Models;
+using FlightPlanner.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace FlightPlanner.Data
 {
-    public class FlightPlannerDbContext: DbContext
+    public class FlightPlannerDbContext: DbContext, IFlightPlannerDbContext
     {
-        //public DbSet<Flight> Flights { get; set; }
-        //public DbSet<Airport> Airports { get; set; }
+        public FlightPlannerDbContext(DbContextOptions options) : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DbSet<Flight> Flights { get; set; }
+        public DbSet<Airport> Airports { get; set; }
+        public async Task<int> SaveChangesAsync()
         {
-            //IConfigurationRoot configuration = new ConfigurationBuilder()
-            //    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            //    .AddJsonFile("appsettings.json")
-            //    .Build();
-            //optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            return await base.SaveChangesAsync();
         }
     }
 }

@@ -1,0 +1,17 @@
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\FlightPlanner.Services.deps.json
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\FlightPlanner.Services.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\ref\FlightPlanner.Services.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\FlightPlanner.Services.pdb
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\FlightPlanner.Core.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\FlightPlanner.Data.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\FlightPlanner.Core.pdb
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\bin\Debug\net5.0\FlightPlanner.Data.pdb
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.csproj.AssemblyReference.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.AssemblyInfoInputs.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.AssemblyInfo.cs
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.csproj.CoreCompileInputs.cache
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.csproj.CopyComplete
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\ref\FlightPlanner.Services.dll
+D:\Programming\CSharp\Codelex\flight-planner\FlightPlanner.Services\obj\Debug\net5.0\FlightPlanner.Services.pdb
