@@ -1,8 +1,8 @@
 using AutoMapper;
+using FlightPlanner.Core.Models;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 using FlightPlanner.Handlers;
-using FlightPlanner.Models;
 using FlightPlanner.Services;
 using FlightPlanner.Services.Mappers;
 using FlightPlanner.Services.Validators;

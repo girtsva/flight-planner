@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using FlightPlanner.Core.DTO;
+using FlightPlanner.Core.Models;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
-using FlightPlanner.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FlightPlanner.Services

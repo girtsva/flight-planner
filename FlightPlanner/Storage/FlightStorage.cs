@@ -1,10 +1,10 @@
-﻿using FlightPlanner.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using FlightPlanner.Core.DTO;
+using FlightPlanner.Core.Models;
 using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 

@@ -1,6 +1,4 @@
-﻿using FlightPlanner.Core.Models;
-
-namespace FlightPlanner.Models
+﻿namespace FlightPlanner.Core.Models
 {
     public class Airport : Entity
     {

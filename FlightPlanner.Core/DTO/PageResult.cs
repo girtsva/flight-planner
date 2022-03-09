@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FlightPlanner.Models;
+using FlightPlanner.Core.Models;
 
 namespace FlightPlanner.Core.DTO
 {

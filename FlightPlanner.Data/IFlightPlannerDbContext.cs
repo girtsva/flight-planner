@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using FlightPlanner.Models;
+using FlightPlanner.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 

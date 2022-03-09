@@ -1,5 +1,4 @@
 ﻿using FlightPlanner.Core.Models;
-using FlightPlanner.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 

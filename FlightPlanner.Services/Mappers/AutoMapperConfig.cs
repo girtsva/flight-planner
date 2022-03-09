@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FlightPlanner.Core.DTO;
-using FlightPlanner.Models;
+using FlightPlanner.Core.Models;
 
 namespace FlightPlanner.Services.Mappers
 {
