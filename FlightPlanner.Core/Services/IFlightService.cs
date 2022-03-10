@@ -10,5 +10,7 @@ namespace FlightPlanner.Core.Services
         void DeleteFlightById(int id);
 
         bool FlightExistsInStorage(AddFlightDto dto);
+
+        PageResult SearchFlights(SearchFlightRequest request);
     }
 }

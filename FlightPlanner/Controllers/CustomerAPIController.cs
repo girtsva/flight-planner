@@ -3,7 +3,6 @@ using System.Linq;
 using AutoMapper;
 using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
-using FlightPlanner.Data;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -16,15 +15,15 @@ namespace FlightPlanner.Controllers
     public class CustomerAPIController : ControllerBase
     {
         private readonly IAirportService _airportService;
+        private readonly IFlightService _flightService;
         private readonly IMapper _mapper;
         private readonly IEnumerable<ISearchFlightValidator> _validators;
-        private readonly IFlightPlannerDbContext _context;
         private static readonly object _flightLock = new object();
 
-        public CustomerAPIController(IAirportService airportService, IMapper mapper, IEnumerable<ISearchFlightValidator> validators, IFlightPlannerDbContext context)
+        public CustomerAPIController(IAirportService airportService, IFlightService flightService, IMapper mapper, IEnumerable<ISearchFlightValidator> validators)
         {
             _airportService = airportService;
-            _context = context;
+            _flightService = flightService;
             _mapper = mapper;
             _validators = validators;
         }
@@ -56,7 +55,7 @@ namespace FlightPlanner.Controllers
                     return BadRequest();
                 }
 
-                return Ok(FlightStorage.SearchFlights(request, _context));
+                return Ok(_flightService.SearchFlights(request));
             }
         }
 
@@ -64,14 +63,9 @@ namespace FlightPlanner.Controllers
         [Route("flights/{id}")]
         public IActionResult FindFlightById(int id)
         {
-            var flight = FlightStorage.GetFlight(id, _context);
+            var flight = _flightService.GetFlightWithAirports(id);
 
-            if (flight == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(flight);
+            return flight == null ? NotFound() : Ok(_mapper.Map<AddFlightDto>(flight));
         }
     }
 }

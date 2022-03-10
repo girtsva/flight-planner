@@ -40,5 +40,21 @@ namespace FlightPlanner.Services
                                                      flight.ArrivalTime == dto.ArrivalTime);
             //}
         }
+
+        public PageResult SearchFlights(SearchFlightRequest request)
+        {
+            //lock (_flightLock)
+            //{
+                var foundFlights = Query()
+                    .Include(flight => flight.From)
+                    .Include(flight => flight.To)
+                    .Where(flight =>
+                        flight.From.AirportName.ToLower().Trim() == request.From.ToLower().Trim() &&
+                        flight.To.AirportName.ToLower().Trim() == request.To.ToLower().Trim() &&
+                        flight.DepartureTime.Substring(0, 10) == request.DepartureDate.Substring(0, 10)).ToList();
+
+                return new PageResult(foundFlights);
+            //}
+        }
     }
 }
