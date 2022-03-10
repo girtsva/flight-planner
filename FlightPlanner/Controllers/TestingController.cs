@@ -10,6 +10,7 @@ namespace FlightPlanner.Controllers
     public class TestingController : ControllerBase
     {
         private readonly IDbClearService _service;
+        private static readonly object _flightLock = new object();
 
         public TestingController(IDbClearService service)
         {
@@ -20,9 +21,12 @@ namespace FlightPlanner.Controllers
         [Route("clear")]
         public IActionResult Clear()
         {
-            _service.DeleteAll();
+            lock (_flightLock)
+            {
+                _service.DeleteAll();
 
-            return Ok();
+                return Ok();
+            }
         }
     }
 }
