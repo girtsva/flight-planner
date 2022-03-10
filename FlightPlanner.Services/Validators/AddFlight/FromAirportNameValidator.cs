@@ -1,7 +1,7 @@
 ﻿using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
 
-namespace FlightPlanner.Services.Validators
+namespace FlightPlanner.Services.Validators.AddFlight
 {
     public class FromAirportNameValidator : IValidator
     {

@@ -5,7 +5,7 @@ using FlightPlanner.Data;
 using FlightPlanner.Handlers;
 using FlightPlanner.Services;
 using FlightPlanner.Services.Mappers;
-using FlightPlanner.Services.Validators;
+using FlightPlanner.Services.Validators.AddFlight;
 using FlightPlanner.Services.Validators.SearchFlight;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;

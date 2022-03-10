@@ -1,13 +1,13 @@
 ﻿using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
 
-namespace FlightPlanner.Services.Validators
+namespace FlightPlanner.Services.Validators.AddFlight
 {
-    public class ToAirportValidator : IValidator
+    public class FromAirportValidator : IValidator
     {
         public bool IsValid(AddFlightDto dto)
         {
-            return dto?.To != null;
+            return dto?.From != null;
         }
     }
 }
