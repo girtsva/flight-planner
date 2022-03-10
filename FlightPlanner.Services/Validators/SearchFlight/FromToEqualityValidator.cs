@@ -1,6 +1,6 @@
-﻿using System;
-using FlightPlanner.Core.DTO;
+﻿using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
+using System;
 
 namespace FlightPlanner.Services.Validators.SearchFlight
 {

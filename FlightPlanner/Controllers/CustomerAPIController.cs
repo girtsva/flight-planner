@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
-using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FlightPlanner.Controllers
 {
@@ -35,7 +34,7 @@ namespace FlightPlanner.Controllers
             var airports = _airportService.FindAirports(search);
             var airportsDto = new List<AddAirportDto>();
 
-            // mapping to required request format
+            // mapping to format required by request
             foreach (var airport in airports)
             {
                 airportsDto.Add(_mapper.Map<AddAirportDto>(airport));

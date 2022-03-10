@@ -68,7 +68,6 @@ namespace FlightPlanner.Controllers
             lock (_flightLock)
             {
                 _flightService.DeleteFlightById(id);
-                //FlightStorage.DeleteFlight(id, _context);
 
                 return Ok();
             }
