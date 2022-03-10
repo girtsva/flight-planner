@@ -46,6 +46,7 @@ namespace FlightPlanner
             services.AddTransient<IDbClearService, DbClearService>();
             services.AddTransient<IEntityService<Flight>, EntityService<Flight>>();
             services.AddTransient<IEntityService<Airport>, EntityService<Airport>>();
+            services.AddTransient<IAirportService, AirportService>();
             services.AddTransient<IFlightService, FlightService>();
             services.AddTransient<IValidator, AddFlightRequestValidator>();
             services.AddTransient<IValidator, CarrierValidator>();

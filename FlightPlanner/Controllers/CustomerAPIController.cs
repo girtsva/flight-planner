@@ -1,4 +1,7 @@
-﻿using FlightPlanner.Core.DTO;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using FlightPlanner.Core.DTO;
+using FlightPlanner.Core.Services;
 using FlightPlanner.Data;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Cors;
@@ -11,21 +14,32 @@ namespace FlightPlanner.Controllers
     [ApiController]
     public class CustomerAPIController : ControllerBase
     {
+        private readonly IAirportService _airportService;
+        private readonly IMapper _mapper;
         private readonly IFlightPlannerDbContext _context;
         private static readonly object _flightLock = new object();
 
-        public CustomerAPIController(IFlightPlannerDbContext context)
+        public CustomerAPIController(IAirportService airportService, IMapper mapper, IFlightPlannerDbContext context)
         {
+            _airportService = airportService;
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("airports")]
         public IActionResult SearchAirports(string search)
         {
-            var airports = FlightStorage.FindAirports(search, _context);
+            var airports = _airportService.FindAirports(search);
+            var airportsDto = new List<AddAirportDto>();
+
+            // mapping to required request format
+            foreach (var airport in airports)
+            {
+                airportsDto.Add(_mapper.Map<AddAirportDto>(airport));
+            }
             
-            return Ok(airports);
+            return Ok(airportsDto);
         }
 
         [HttpPost]
