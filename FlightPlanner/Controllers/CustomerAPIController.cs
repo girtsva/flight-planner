@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using FlightPlanner.Core.DTO;
 using FlightPlanner.Core.Services;
@@ -16,14 +17,16 @@ namespace FlightPlanner.Controllers
     {
         private readonly IAirportService _airportService;
         private readonly IMapper _mapper;
+        private readonly IEnumerable<ISearchFlightValidator> _validators;
         private readonly IFlightPlannerDbContext _context;
         private static readonly object _flightLock = new object();
 
-        public CustomerAPIController(IAirportService airportService, IMapper mapper, IFlightPlannerDbContext context)
+        public CustomerAPIController(IAirportService airportService, IMapper mapper, IEnumerable<ISearchFlightValidator> validators, IFlightPlannerDbContext context)
         {
             _airportService = airportService;
             _context = context;
             _mapper = mapper;
+            _validators = validators;
         }
 
         [HttpGet]
@@ -48,7 +51,7 @@ namespace FlightPlanner.Controllers
         {
             lock (_flightLock)
             {
-                if (!FlightStorage.IsValidSearchFlightRequest(request))
+                if (!_validators.All(validator => validator.IsValid(request)))
                 {
                     return BadRequest();
                 }

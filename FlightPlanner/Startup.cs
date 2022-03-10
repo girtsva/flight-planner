@@ -6,6 +6,7 @@ using FlightPlanner.Handlers;
 using FlightPlanner.Services;
 using FlightPlanner.Services.Mappers;
 using FlightPlanner.Services.Validators;
+using FlightPlanner.Services.Validators.SearchFlight;
 using FlightPlanner.Storage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -62,6 +63,11 @@ namespace FlightPlanner
             services.AddTransient<IValidator, ToAirportNameValidator>();
             services.AddTransient<IValidator, AirportEqualityValidator>();
             services.AddTransient<IValidator, TimeFrameValidator>();
+            services.AddTransient<ISearchFlightValidator, SearchFlightRequestValidator>();
+            services.AddTransient<ISearchFlightValidator, FromValidator>();
+            services.AddTransient<ISearchFlightValidator, ToValidator>();
+            services.AddTransient<ISearchFlightValidator, DepartureDateValidator>();
+            services.AddTransient<ISearchFlightValidator, FromToEqualityValidator>();
             var mapper = AutoMapperConfig.CreateMapper();
             services.AddSingleton<IMapper>(mapper);
 
