@@ -20,4 +20,4 @@ The tests can be found here: [Flight Planner (TS Jest tests)](https://github.com
 
 ![screenshot](/screen01.png "Angular screen 2")
 
-![screenshot](/screen.png "Swagger screen")
+![screenshot](/screen.PNG "Swagger screen")
