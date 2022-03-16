@@ -1,6 +1,6 @@
-﻿namespace FlightPlanner.Models
+﻿namespace FlightPlanner.Core.Models
 {
-    public class AddFlightRequest
+    public class Flight : Entity
     {
         public Airport From { get; set; }
         public Airport To { get; set; }

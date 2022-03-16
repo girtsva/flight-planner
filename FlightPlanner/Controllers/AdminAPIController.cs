@@ -1,8 +1,12 @@
-﻿using FlightPlanner.Models;
-using FlightPlanner.Storage;
-using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using FlightPlanner.Core.DTO;
+using FlightPlanner.Core.Models;
+using FlightPlanner.Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FlightPlanner.Controllers
 {
@@ -12,49 +16,58 @@ namespace FlightPlanner.Controllers
     [Authorize]
     public class AdminAPIController : ControllerBase
     {
+        private readonly IFlightService _flightService;
+        private readonly IEnumerable<IValidator> _validators;
+        private readonly IMapper _mapper;
         private static readonly object _flightLock = new object();
+
+        public AdminAPIController(IFlightService flightService, IEnumerable<IValidator> validators, IMapper mapper)
+        {
+            _flightService = flightService;
+            _validators = validators;
+            _mapper = mapper;
+        }
 
         [HttpGet]
         [Route("flights/{id}")]
-        public IActionResult GetFlights(int id)
+        public IActionResult GetFlight(int id)
         {
-            var flight = FlightStorage.GetFlight(id);
+            var flight = _flightService.GetFlightWithAirports(id);
 
-            if (flight == null)
-            {
-                return NotFound();
-            }
-                
-            return Ok(flight);
+            return flight == null ? NotFound() : Ok(flight);
         }
 
         [HttpPut, Authorize]
         [Route("flights")]
-        public IActionResult PutFlights(AddFlightRequest request)
+        public IActionResult PutFlights(AddFlightDto dto)
         {
             lock (_flightLock)
             {
-                if (!FlightStorage.IsValid(request))
+                if (!_validators.All(validator => validator.IsValid(dto)))
                 {
                     return BadRequest();
                 }
 
-                if (FlightStorage.Exists(request))
+                if (_flightService.FlightExistsInStorage(dto))
                 {
                     return Conflict();
                 }
 
-                return Created("", FlightStorage.AddFlight(request));
+                var flight = _mapper.Map<Flight>(dto);
+
+                _flightService.Create(flight);
+
+                return Created("", _mapper.Map<AddFlightDto>(flight));
             }
         }
 
         [HttpDelete]
         [Route("flights/{id}")]
-        public IActionResult DeleteFlights(int id)
+        public IActionResult DeleteFlight(int id)
         {
             lock (_flightLock)
             {
-                FlightStorage.DeleteFlight(id);
+                _flightService.DeleteFlightById(id);
 
                 return Ok();
             }

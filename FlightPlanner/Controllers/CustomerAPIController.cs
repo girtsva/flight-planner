@@ -1,7 +1,10 @@
-﻿using FlightPlanner.Models;
-using FlightPlanner.Storage;
+﻿using AutoMapper;
+using FlightPlanner.Core.DTO;
+using FlightPlanner.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FlightPlanner.Controllers
 {
@@ -10,15 +13,34 @@ namespace FlightPlanner.Controllers
     [ApiController]
     public class CustomerAPIController : ControllerBase
     {
+        private readonly IAirportService _airportService;
+        private readonly IFlightService _flightService;
+        private readonly IMapper _mapper;
+        private readonly IEnumerable<ISearchFlightValidator> _validators;
         private static readonly object _flightLock = new object();
+
+        public CustomerAPIController(IAirportService airportService, IFlightService flightService, IMapper mapper, IEnumerable<ISearchFlightValidator> validators)
+        {
+            _airportService = airportService;
+            _flightService = flightService;
+            _mapper = mapper;
+            _validators = validators;
+        }
 
         [HttpGet]
         [Route("airports")]
         public IActionResult SearchAirports(string search)
         {
-            var airports = FlightStorage.FindAirports(search);
+            var airports = _airportService.FindAirports(search);
+            var airportsDto = new List<AddAirportDto>();
+
+            // mapping to format required by request
+            foreach (var airport in airports)
+            {
+                airportsDto.Add(_mapper.Map<AddAirportDto>(airport));
+            }
             
-            return Ok(airports);
+            return Ok(airportsDto);
         }
 
         [HttpPost]
@@ -27,27 +49,22 @@ namespace FlightPlanner.Controllers
         {
             lock (_flightLock)
             {
-                if (!FlightStorage.IsValidSearchRequest(request))
+                if (!_validators.All(validator => validator.IsValid(request)))
                 {
                     return BadRequest();
                 }
 
-                return Ok(FlightStorage.SearchFlights(request));
+                return Ok(_flightService.SearchFlights(request));
             }
         }
 
         [HttpGet]
         [Route("flights/{id}")]
-        public IActionResult SearchFlights(int id)
+        public IActionResult FindFlightById(int id)
         {
-            var flight = FlightStorage.GetFlight(id);
+            var flight = _flightService.GetFlightWithAirports(id);
 
-            if (flight == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(flight);
+            return flight == null ? NotFound() : Ok(_mapper.Map<AddFlightDto>(flight));
         }
     }
 }

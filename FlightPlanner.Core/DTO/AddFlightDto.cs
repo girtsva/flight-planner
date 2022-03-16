@@ -1,10 +1,10 @@
-﻿namespace FlightPlanner.Models
+﻿namespace FlightPlanner.Core.DTO
 {
-    public class Flight
+    public class AddFlightDto
     {
         public int Id { get; set; }
-        public Airport From { get; set; }
-        public Airport To { get; set; }
+        public AddAirportDto From { get; set; }
+        public AddAirportDto To { get; set; }
         public string Carrier { get; set; }
         public string DepartureTime { get; set; }
         public string ArrivalTime { get; set; }

@@ -1,4 +1,4 @@
-﻿using FlightPlanner.Storage;
+﻿using FlightPlanner.Core.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +9,24 @@ namespace FlightPlanner.Controllers
     [ApiController]
     public class TestingController : ControllerBase
     {
+        private readonly IDbClearService _service;
+        private static readonly object _flightLock = new object();
+
+        public TestingController(IDbClearService service)
+        {
+            _service = service;
+        }
+        
         [HttpPost]
         [Route("clear")]
         public IActionResult Clear()
         {
-            FlightStorage.ClearFlights();
-            return Ok();
+            lock (_flightLock)
+            {
+                _service.DeleteAll();
+
+                return Ok();
+            }
         }
     }
 }

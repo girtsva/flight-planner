@@ -1,12 +1,9 @@
-﻿using System.Text.Json.Serialization;
-
-namespace FlightPlanner.Models
+﻿namespace FlightPlanner.Core.Models
 {
-    public class Airport
+    public class Airport : Entity
     {
         public string Country { get; set; }
         public string City { get; set; }
-        [JsonPropertyName("airport")]
         public string AirportName { get; set; }
     }
 }
