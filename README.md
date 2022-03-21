@@ -5,7 +5,7 @@
 An application which can store flights between different airports and allows to search them.
 
 **Please note:**  
-Here you can see the first iteration of project (second iteration available at [2nd_iteration_DB branch]() and third and final iteration at [3rd_iteration_scalability](https://github.com/girtsva/flight-planner/tree/3rd_iteration_scalability) branch).  
+Here you can see the first iteration of project (second iteration available at [2nd_iteration_DB branch](https://github.com/girtsva/flight-planner/tree/2nd_iteration_DB) and third and final iteration at [3rd_iteration_scalability](https://github.com/girtsva/flight-planner/tree/3rd_iteration_scalability) branch).  
 Branches are not merged intentionally to keep the history for different solutions.
 
 **This iteration's technical realisation:**  
