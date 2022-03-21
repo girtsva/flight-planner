@@ -10,6 +10,7 @@ Branches are not merged intentionally to keep the history for different solution
 
 **This iteration's technical realisation:**  
 Working with Swagger. Tested with TypeScript Jest tests and Postman.
+The tests can be found here: [Flight Planner (TS Jest tests)](https://github.com/girtsva/flight-planner-tests)
 
 **Next steps (realised in next iterations):**  
 Implementing database solution, Work on UI and scalability.
