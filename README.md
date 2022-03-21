@@ -13,3 +13,5 @@ Working with Swagger. Tested with TypeScript Jest tests and Postman.
 
 **Next steps (realised in next iterations):**  
 Implementing database solution, Work on UI and scalability.
+
+![screenshot](/screen.PNG "Swagger screen")
